@@ -1,9 +1,13 @@
-import styled from 'styled-components'
-import db from '../db.json'
-import Widget from '../src/components/Widget'
-import Footer from '../src/components/Footer'
-import GitHubCorner from '../src/components/GitHubCorner'
-import QuizBackground from '../src/components/QuizBackground'
+import React from 'react';
+import styled from 'styled-components';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+import db from '../db.json';
+// eslint-disable-next-line import/no-named-as-default
+import Widget from '../src/components/Widget';
+import Footer from '../src/components/Footer';
+import GitHubCorner from '../src/components/GitHubCorner';
+import QuizBackground from '../src/components/QuizBackground';
 
 export const QuizContainer = styled.div`
   width: 100%;
@@ -14,18 +18,36 @@ export const QuizContainer = styled.div`
     margin: auto;
     padding: 15px;
   }
-`
+`;
 
-export default function Home() {/* teste */
+export default function Home() {
+  const router = useRouter();
+  const [seuNome, setSeuNome] = React.useState('');
   return (
     <QuizBackground backgroundImage={db.bg}>
+      <Head />
       <QuizContainer>
         <Widget>
           <Widget.Header>
             <h1>aheuaheuaheuaheu</h1>
           </Widget.Header>
           <Widget.Content>
-            <p>aheuhuahueijkajksbjklljkasdçksdhjksdf</p>
+            <form onSubmit={function(ev) {
+              ev.preventDefault();
+              router.push(`/quiz?name=${seuNome}`);
+            }}
+            >
+              <input
+                onChange={function(ev) {
+                  setSeuNome(ev.target.value);
+                }}
+                placeholder="Quem é você?"
+              />
+              <button type="submit" disabled={seuNome.length === 0}>
+                Jogar
+                {seuNome}
+              </button>
+            </form>
           </Widget.Content>
         </Widget>
         <Widget>
@@ -36,7 +58,7 @@ export default function Home() {/* teste */
         </Widget>
         <Footer />
       </QuizContainer>
-      <GitHubCorner projectUrl="https://github.com/timoteobrasil" />
+      <GitHubCorner projectUrl="https://github.com/timoteobrasil/aluraquiz-base" />
     </QuizBackground>
-  )
+  );
 }
